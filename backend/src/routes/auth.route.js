@@ -14,5 +14,4 @@ router.post("/onboarding",protectedRoute,onboard)
 
 router.get("/me",protectedRoute,authenticatedUser)
 
-
 export default router

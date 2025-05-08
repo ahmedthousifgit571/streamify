@@ -165,7 +165,7 @@ export const onboard  = async(req,res)=>{
         })
       }
 
-      //update user info in stream (peding)
+      //update user info in stream 
       try {
         await upsertStreamUser({
             id: updatedUser._id.toString(),
