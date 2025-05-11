@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { ShipWheelIcon, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
+import { axiosInstance } from "../lib/axios";
 
 const SignUpPage = () => {
   const [signupData, setSignupData] = useState({
@@ -8,11 +10,20 @@ const SignUpPage = () => {
     email: "",
     password: "",
   });
+  const queryClient = useQueryClient()
+  const {mutate,isPending,error} = useMutation({
+    mutationFn: async() =>{
+      const response = await axiosInstance.post("/auth/signup",signupData)
+      return response.data
+    },
+    onSuccess: ()=> queryClient.invalidateQueries({queryKey:["authUser"]})
+  })
 
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignUpPage = (e) => {
     e.preventDefault();
+    mutate()
     // Handle form submission logic here
   };
 
@@ -186,7 +197,7 @@ const SignUpPage = () => {
                 className="btn btn-success w-full text-white"
                 type="submit"
               >
-                Create Account
+               {isPending? "signingUp..." : "Create Account"}
               </button>
 
               {/* Already have account section */}
