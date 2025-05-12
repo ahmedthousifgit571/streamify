@@ -1,48 +1,69 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { axiosInstance } from './lib/axios.js';
 import HomePage from './pages/HomePage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
+import PageLoader from './components/PageLoader.jsx';
+import NotificationsPage from './pages/NotificationsPage.jsx';
+import CallPage from './pages/CallPage.jsx';
+import ChatPage from './pages/ChatPage.jsx';
+import useAuthUser from './hooks/useAuthUser.js';
+import OnboardingPage from './pages/OnboardingPage.jsx';
 
 // Create a QueryClient instance
 const queryClient = new QueryClient();
 
 function AppContent() {
-  // Authentication query
-  const {
-    data: authData,
-    error
-  } = useQuery({
-    queryKey: ['authUser'],
-    queryFn: async () => {
-      const res = await axiosInstance.get('/auth/me');
-      return res.data;
-    },
-    retry: false
-  });
+   const {isLoading,authUser} = useAuthUser()  // custom hook Authentication query
 
-  // Determine if user is authenticated
-  const authUser = authData?.user;
+   const isAuthenticated = Boolean(authUser)
+   const isOnboarded = authUser?.isOnboarded
 
+  if (isLoading) {
+    return <PageLoader />;
+  }
   
   // Route configuration with auth checks
   const router = createBrowserRouter([
     {
       path: '/',
-      element:  (authUser ? <HomePage /> : <Navigate to="/login" />)
+      element:  (isAuthenticated && isOnboarded ? (
+        <HomePage />
+      ) : (
+        <Navigate to={!isAuthenticated ? "/login" : "/onboarding"}/>
+      ))
     },
     {
       path: '/signup',
-      element:  (!authUser ?<SignUpPage /> :<Navigate to="/" />  )
+      element:  (!isAuthenticated ?<SignUpPage /> :<Navigate to="/" />  )
     },
     {
       path: '/login',
-      element:  (!authUser ? <LoginPage /> : <Navigate to="/" />  )
+      element:  (!isAuthenticated ? <LoginPage /> : <Navigate to="/" />  )
     },
     {
-      path: '*',
-      element: <Navigate to="/" replace />
+      path: '/notifications',
+      element: ( isAuthenticated ? <NotificationsPage /> : <Navigate  to="/login"/>)
+    },
+    {
+      path: '/call',
+      element: ( isAuthenticated ? <CallPage /> : <Navigate  to="/login"/>)
+    },
+    {
+      path: '/chat',
+      element: ( isAuthenticated ? <ChatPage /> : <Navigate  to="/login"/>)
+    },
+    {
+      path: '/onboarding',
+      element: ( isAuthenticated ? (
+        !isOnboarded ? (
+          <OnboardingPage />
+        ) : (
+          <Navigate to="/"/>
+        )
+      ) : (
+        <Navigate to="/login"/>
+      ))
     }
   ]);
 

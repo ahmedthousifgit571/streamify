@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { ShipWheelIcon, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosInstance } from "../lib/axios";
 import { signup } from "../lib/api";
+
 
 const SignUpPage = () => {
   const [signupData, setSignupData] = useState({
@@ -14,7 +14,7 @@ const SignUpPage = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   
-  const { mutate:signupMutation, isPending, error } = useMutation({
+  const { mutate:signupMutation, isPending, error  } = useMutation({
     mutationFn: signup,
     onSuccess: () => {
       // First invalidate the auth query to trigger a refetch
@@ -30,6 +30,7 @@ const SignUpPage = () => {
     signupMutation(signupData)
     // Handle form submission logic here
   };
+
 
   return (
     <div
@@ -51,7 +52,7 @@ const SignUpPage = () => {
           {
             error && (
               <div className="alert alert-error mb-4">
-                <span>{error.response.data.message}</span>
+                <span>{error.response?.data?.message}</span>
               </div>
             )
           }
