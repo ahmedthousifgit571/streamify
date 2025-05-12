@@ -19,21 +19,13 @@ function AppContent() {
       const res = await axiosInstance.get('/auth/me');
       return res.data;
     },
-    // This ensures the query is always fresh
-    refetchOnWindowFocus: true,
-    retry: 1
+    retry: false
   });
 
   // Determine if user is authenticated
   const authUser = authData?.user;
 
-  // Loading component
-  const LoadingScreen = () => (
-    <div className="flex justify-center items-center h-screen">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-    </div>
-  );
-
+  
   // Route configuration with auth checks
   const router = createBrowserRouter([
     {

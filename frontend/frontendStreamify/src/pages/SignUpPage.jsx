@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { ShipWheelIcon, Eye, EyeOff } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios";
+import { signup } from "../lib/api";
 
 const SignUpPage = () => {
   const [signupData, setSignupData] = useState({
@@ -10,20 +11,23 @@ const SignUpPage = () => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const {mutate,isPending,error} = useMutation({
-    mutationFn: async() =>{
-      const response = await axiosInstance.post("/auth/signup",signupData)
-      return response.data
-    },
-    onSuccess: ()=> queryClient.invalidateQueries({queryKey:["authUser"]})
-  })
+  
+  const { mutate:signupMutation, isPending, error } = useMutation({
+    mutationFn: signup,
+    onSuccess: () => {
+      // First invalidate the auth query to trigger a refetch
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      navigate("/")
+    }
+  });
 
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignUpPage = (e) => {
     e.preventDefault();
-    mutate()
+    signupMutation(signupData)
     // Handle form submission logic here
   };
 
@@ -42,6 +46,15 @@ const SignUpPage = () => {
               Streamify
             </span>
           </div>
+
+          {/* Error message if any */}
+          {
+            error && (
+              <div className="alert alert-error mb-4">
+                <span>{error.response.data.message}</span>
+              </div>
+            )
+          }
 
           <div className="w-full">
             <form onSubmit={handleSignUpPage}>
@@ -197,7 +210,11 @@ const SignUpPage = () => {
                 className="btn btn-success w-full text-white"
                 type="submit"
               >
-               {isPending? "signingUp..." : "Create Account"}
+               {isPending? (
+                <>
+                <span className="loading loading-spinner loading-xs">Loading...</span>
+                </>
+               ) : "Create account" }
               </button>
 
               {/* Already have account section */}
@@ -266,10 +283,11 @@ const SignUpPage = () => {
 
         {/* Right side - Circular illustration */}
 
-        <div className="w-full lg:w-1/2 bg-gradient-to-br from-base-300 to-base-200 relative flex items-center justify-center py-8">
+        {/* Right side - Illustration */}
+        <div className="w-full lg:w-1/2 bg-gradient-to-br from-base-300 to-base-200 relative flex items-center justify-center py-6 sm:py-8">
           <div className="flex flex-col items-center justify-center h-full p-4 md:p-8">
             {/* Circular image container - responsive sizing */}
-            <div className="w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full bg-teal-50 flex items-center justify-center mb-6 lg:mb-8 shadow-lg overflow-hidden relative">
+            <div className="w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full bg-teal-50 flex items-center justify-center mb-4 sm:mb-6 lg:mb-8 shadow-lg overflow-hidden">
               <img
                 src="/signupImage.png"
                 alt="Language connection illustration"
@@ -278,29 +296,30 @@ const SignUpPage = () => {
             </div>
 
             {/* Text content */}
-            <div className="text-center space-y-3 md:space-y-4 max-w-xs md:max-w-sm">
-              <h2 className="text-xl md:text-2xl font-bold text-success">
+            <div className="text-center space-y-2 sm:space-y-3 md:space-y-4 max-w-xs md:max-w-sm">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-success">
                 Connect with language partners worldwide
               </h2>
-              <p className="text-sm md:text-base">
+              <p className="text-xs sm:text-sm md:text-base">
                 Practice conversations, make friends, and improve your language
                 skills together
               </p>
 
               {/* Badges */}
-              <div className="flex flex-wrap justify-center gap-2 mt-3 md:mt-4">
-                <span className="badge badge-success text-white text-xs md:text-sm">
+              <div className="flex flex-wrap justify-center gap-2 mt-2 sm:mt-3 md:mt-4">
+                <span className="badge badge-success text-white text-xs">
                   120+ Languages
                 </span>
-                <span className="badge badge-success text-white text-xs md:text-sm">
+                <span className="badge badge-success text-white text-xs">
                   Global Community
                 </span>
-                <span className="badge badge-success text-white text-xs md:text-sm">
+                <span className="badge badge-success text-white text-xs">
                   Free to Join
                 </span>
               </div>
             </div>
           </div>
+          
         </div>
       </div>
     </div>
