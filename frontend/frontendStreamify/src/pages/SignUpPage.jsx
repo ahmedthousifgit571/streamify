@@ -3,6 +3,7 @@ import { ShipWheelIcon, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
 import { signup } from "../lib/api";
+import useSignup from "../hooks/useSignup";
 
 
 const SignUpPage = () => {
@@ -12,16 +13,8 @@ const SignUpPage = () => {
     password: "",
   });
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
-  
-  const { mutate:signupMutation, isPending, error  } = useMutation({
-    mutationFn: signup,
-    onSuccess: () => {
-      // First invalidate the auth query to trigger a refetch
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      navigate("/")
-    }
-  });
+ 
+  const{signupMutation,isPending,error}= useSignup()   //custom hooks for signup api using tanstack query
 
   const [showPassword, setShowPassword] = useState(false);
 
