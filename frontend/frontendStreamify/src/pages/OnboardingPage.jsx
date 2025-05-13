@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import useAuthUser from '../hooks/useAuthUser'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { completOnboarding } from '../lib/api'
 import { CameraIcon, LoaderIcon, MapIcon, ShipWheelIcon, ShuffleIcon } from 'lucide-react'
 import { LANGUAGES } from '../constants'
 import  toast ,{Toaster}  from 'react-hot-toast'
+import useOnboarding from '../hooks/useOnboarding'
 
 const OnboardingPage = () => {
-  const {isLoading,authUser} = useAuthUser() //custom hook to know user authenticated
+  const {authUser} = useAuthUser() //custom hook to know user authenticated
   const [formState,setFormState] = useState({
     fullName: authUser?.fullName||"",
     bio: authUser?.bio || "",
@@ -18,24 +17,13 @@ const OnboardingPage = () => {
 
   })
 
-  const queryClient = useQueryClient()
-
-  //tanstack query for fetching from api
-  const {mutate : onboardingMutation, isPending} = useMutation({
-    mutationFn: completOnboarding,
-    onSuccess : ()=>{
-      toast.success("Profile onboarded successfully")
-      queryClient.invalidateQueries({queryKey :["authUser"]})
-    },
-    onError: (error)=>{
-      toast.error(error.response.data.message)
-    }
-  })
-
-  const handleSubmit = (e)=>{
+   const {onboardingMutation,isPending} = useOnboarding()  //custom hook for onboarding api using tanstack 
+   
+   const handleSubmit = (e)=>{
     e.preventDefault()
     onboardingMutation(formState)
-  }
+   }
+
   const handleRandomAvatar =()=>{
      const idx = Math.floor(Math.random() * 100 ) +1
      const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`

@@ -35,11 +35,11 @@ function AppContent() {
     },
     {
       path: '/signup',
-      element:  (!isAuthenticated ?<SignUpPage /> :<Navigate to="/" />  )
+      element:  (!isAuthenticated ?<SignUpPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding" } />  )
     },
     {
       path: '/login',
-      element:  (!isAuthenticated ? <LoginPage /> : <Navigate to="/" />  )
+      element:  (!isAuthenticated ? <LoginPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding" } />  )
     },
     {
       path: '/notifications',
