@@ -13,16 +13,18 @@ import { Toaster } from "react-hot-toast";
 import PageLoader from "./components/PageLoader.jsx";
 import useAuthUser from "./hooks/useAuthUser.js";
 import Layout from "./components/Layouts.jsx";
+import { useThemeStore } from "./store/useThemeStore.js";
 
 const AppRoutes = () => {
   const { isLoading, authUser } = useAuthUser();
-
+  const {theme ,setTheme} = useThemeStore()
   const isAuthenticated = Boolean(authUser);
   const isOnboarded = authUser?.isOnboarded;
 
   if (isLoading) return <PageLoader />;
 
   return (
+    <div className="h-screen" data-theme={theme}>
     <Routes>
       <Route
         path="/"
@@ -35,19 +37,19 @@ const AppRoutes = () => {
             <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
           )
         }
-      />
+        />
       <Route
         path="/signup"
         element={
           !isAuthenticated ? <SignUpPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />
         }
-      />
+        />
       <Route
         path="/login"
         element={
           !isAuthenticated ? <LoginPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />
         }
-      />
+        />
       <Route
         path="/notifications"
         element={
@@ -59,7 +61,7 @@ const AppRoutes = () => {
             <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
           )
         }
-      />
+        />
       <Route
         path="/call/:id"
         element={
@@ -69,7 +71,7 @@ const AppRoutes = () => {
             <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
           )
         }
-      />
+        />
       <Route
         path="/chat/:id"
         element={
@@ -81,7 +83,7 @@ const AppRoutes = () => {
             <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
           )
         }
-      />
+        />
       <Route
         path="/onboarding"
         element={
@@ -95,8 +97,9 @@ const AppRoutes = () => {
             <Navigate to="/login" />
           )
         }
-      />
+        />
     </Routes>
+  </div>
   );
 };
 
