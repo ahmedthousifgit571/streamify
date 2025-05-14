@@ -5,22 +5,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { logout } from '../lib/api'
 import { BellIcon, LogOutIcon, ShipWheelIcon } from 'lucide-react'
 import ThemeSelector from './ThemeSelector'
+import useLogout from '../hooks/useLogout'
 
 const NavBar = () => {
     const {authUser} = useAuthUser()
     const location = useLocation()
     const isChatPage = location.pathname?.startsWith("/chat")
 
-    const queryClient = useQueryClient()
-    const navigate = useNavigate()
-
-    const { mutate: logoutMutation } = useMutation({
-      mutationFn: logout,
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["authUser"] })
-      
-      },
-    });
+    const{logoutMutation} =  useLogout()  //custom hook for logout api using tanstack query
+  
    
    
   return (
