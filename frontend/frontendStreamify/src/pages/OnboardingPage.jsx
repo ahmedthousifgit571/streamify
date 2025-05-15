@@ -20,7 +20,6 @@ const OnboardingPage = () => {
    const {onboardingMutation,isPending} = useOnboarding()  //custom hook for onboarding api using tanstack 
    
    const handleSubmit = (e)=>{
-    e.preventDefault()
     onboardingMutation(formState)
    }
 
