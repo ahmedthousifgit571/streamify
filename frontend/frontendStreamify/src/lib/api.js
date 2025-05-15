@@ -29,3 +29,23 @@ export const completOnboarding = async(userData)=>{
       const res = await axiosInstance.post('/auth/onboarding',userData)
       return res.data
 }
+
+export const getUserFriends = async() =>{
+      const res = await axiosInstance.get('/users/friends')
+      return res.data
+}
+
+export const getRecommendedUsers = async() =>{
+      const res =  await axiosInstance.get('/users')
+      return res.data
+}
+
+export const getOutgoingFriendRequests = async() =>{
+      const res = await axiosInstance.get('/users/outgoing-friendRequests')
+      return res.data
+}
+
+export const sendFriendRequests = async(userId) =>{
+      const res = await axiosInstance.post(`/users/friend-request/${userId}`)
+      return res.data
+}
