@@ -1,9 +1,8 @@
+![Screenshot (495)](https://github.com/user-attachments/assets/983289b6-9d2d-4fa7-8cec-b6c464697e1f)
+
 # 🚀 Chatify
 
 A real-time chat application built for seamless conversations, video calls, and language exchange — all styled with 32 vibrant UI themes and powered by modern, scalable technologies.
-
-![image](https://github.com/user-attachments/assets/ac65dd29-3004-4d31-81b6-289dc8da2a64)
-
 
 ---
 
