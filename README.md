@@ -2,7 +2,8 @@
 
 A real-time chat application built for seamless conversations, video calls, and language exchange — all styled with 32 vibrant UI themes and powered by modern, scalable technologies.
 
-!(./ece83b77-7f53-46f2-9298-893c4357cf69.png)
+![image](https://github.com/user-attachments/assets/ac65dd29-3004-4d31-81b6-289dc8da2a64)
+
 
 ---
 
