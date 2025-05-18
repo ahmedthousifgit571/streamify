@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "streamify": "file:.."
+  }
+}
