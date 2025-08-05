@@ -57,9 +57,9 @@ export const signup = async (req,res)=>{
 
     res.cookie("jwt",token,{
         maxAge: 7 * 24 * 60 * 60 * 1000 ,         //7days
-        httpOnly:true,
-        sameSite:"strict",
-        secure: process.env.NODE_ENV ==="production"
+        httpOnly: true,
+        secure: true, // secure because Render uses HTTPS
+        sameSite: "none" 
 
     })
 
@@ -105,10 +105,9 @@ export const login = async (req,res)=>{
 
     res.cookie("jwt",token,{
         maxAge: 7 * 24 * 60 * 60 * 1000 ,         //7days
-        httpOnly:true,
-        sameSite:"strict",
-        secure: process.env.NODE_ENV ==="production"
-
+        httpOnly: true,
+        secure: true, // only works over HTTPS
+        sameSite: "none", // cross-site cookie needed for Vercel ↔ Render
     })
 
     res.status(200).json({
