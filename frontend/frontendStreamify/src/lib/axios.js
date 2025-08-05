@@ -2,9 +2,9 @@ import axios from 'axios'
 
 const BASE_URL = import.meta.env.DEV
   ? 'http://localhost:5001/api'  // dev mode
-  : 'https://streamify-backend-iqpf.onrender.com';         
+  : 'https://streamify-backend-iqpf.onrender.com/api';         
 export const axiosInstance = axios.create({
     baseURL: BASE_URL,
     withCredentials:true,
-})
+})  
 
