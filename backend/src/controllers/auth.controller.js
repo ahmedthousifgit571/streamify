@@ -126,7 +126,11 @@ export const login = async (req,res)=>{
 }
 
 export const logout = async (req,res)=>{
-    res.clearCookie("jwt")
+    res.clearCookie("jwt", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  })
     res.status(200).json({
         statusCode:200,
         message:"logout succesfully"
